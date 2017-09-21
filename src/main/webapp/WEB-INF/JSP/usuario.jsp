@@ -37,7 +37,7 @@
 
 	<%--Fila de las tablas. --%>
 	<tbody>
-		<c:forEach var="usuario" items="${usuarios}" >
+		 <c:forEach var="usuario" items="${usuarios}" >
 			<tr>
 				<td>
 					<a href="?op=modificar&id=${usuario.id}">Modificar</a>
@@ -47,7 +47,7 @@
 				<td>${usuario.password}</td>
 				<td>${usuario.description}</td>
 			</tr>
-		</c:forEach>
+		 </c:forEach>
 	</tbody>
 </table>
 
