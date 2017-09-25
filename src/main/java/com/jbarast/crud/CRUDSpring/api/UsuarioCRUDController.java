@@ -3,10 +3,18 @@
 package com.jbarast.crud.CRUDSpring.api;
 
 
+
 import com.jbarast.crud.CRUDSpring.models.Usuario;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.*;
+
+import play.mvc.BodyParser;
+
+import java.io.IOException;
+import java.util.List;
+
+import static play.mvc.Controller.request;
 
 
 /**
@@ -23,11 +31,12 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioCRUDController {
 
     @GetMapping
-    public Usuario usuarioApi(@PathVariable(name = "id") Long id){
-        return new Usuario(id,"usuario"+id,"Holita","descripcion");
+    @ResponseBody
+    public Usuario usuarioApi(@PathVariable(name = "id") Long id)  {
+
+        return new Usuario(id, "usuario" + id, "Contraseña" + id,"Descripcion");
 
     }
-
 
 
 }

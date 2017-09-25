@@ -3,6 +3,10 @@ package com.jbarast.crud.CRUDSpring.models;
 
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 
 /**
@@ -13,15 +17,15 @@ import lombok.*;
  *
  *  Created 19/09/2017
  */
-//@Entity
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario {
 
     //atributos
-    //@Id
-   // @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
      private Long id;
 
      private String name;
