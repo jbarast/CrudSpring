@@ -1,53 +1,51 @@
 
-//buscar por id.
-$(function(){	
-	$('#buscarPorId').click(function(e){
+$(function(){
+	$('#bucarPorId').click(function(e){
 		e.preventDefault();
+		
 		buscarUsuarioPorId($('#id').val());
-	
-	});	
+	});
 	
 	$('#insertar').click(function(e){
 		e.preventDefault();
+		
 		usuario = crearUsuarioDesdePantalla();
+		
 		$.ajax({
-			type : 'POST',
+			type: 'POST',
 			url: 'usuario',
 			data: JSON.stringify(usuario),
-			dataType: 'aplication/json'
+			contentType: 'application/json; charset=utf-8',
+			dataType: 'json'
+		}).done(function(){
+			alert("Insertado");
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			alert("ERROR: " + jqXHR.responseText);
+			console.log(jqXHR, textStatus, errorThrown);
 		});
 	});
-});  
-
-//Insertar
-
 	
 //	$('#id').change(function(){
 //		$.getJSON('/api/usuario/' + $('#id').val(), function(usuario){
-//			$('#name').val(usuario.name);
-//            $('#password').val(usuario.password);
-//            $('#description').val(usuario.description);
+//			$('#nick').val(usuario.nick);
+//			$('#password').val(usuario.password);
 //		});
-//    });
-
-    
-
-
-//funciones
+//	});
+});
 
 function buscarUsuarioPorId(id){
-	$.getJSON('usuario/'+id,rellenarUsuarioEnPantalla);
+	$.getJSON('usuario/' + id, rellenarUsuarioEnPantalla);
 }
 
 function rellenarUsuarioEnPantalla(usuario){
 	$('#name').val(usuario.name);
 	$('#password').val(usuario.password);
 	$('#description').val(usuario.description);
-	
 }
 
-function crearuUsuarioDesdePantalla(){
-	usuario={}
+function crearUsuarioDesdePantalla(){
+	usuario = {};
+	
 	usuario.name = $('#name').val();
 	usuario.password = $('#password').val();
 	usuario.description = $('#description').val();
