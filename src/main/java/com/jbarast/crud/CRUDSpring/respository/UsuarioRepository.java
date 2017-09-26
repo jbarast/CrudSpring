@@ -22,4 +22,6 @@ import com.jbarast.crud.CRUDSpring.models.Usuario;
 public interface UsuarioRepository extends PagingAndSortingRepository<Usuario, Long> {
 
 	List<Usuario> findByName(@Param("name") String name);
+
+	List<Usuario> findByPassword(@Param("password") String password);
 }

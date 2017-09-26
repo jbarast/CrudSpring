@@ -3,9 +3,17 @@ $(function(){
 	$('#bucarPorId').click(function(e){
 		e.preventDefault();
 		
-		buscarUsuarioPorId($('#id').val());
+		$.ajax({
+			type: 'GET',
+			url: 'usuario/' + $('#id').val()
+		}).done(function(usuario){
+			rellenarUsuarioEnPantalla(usuario);
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			alert("ERROR: " + jqXHR.responseText);
+			console.log(jqXHR, textStatus, errorThrown);
+		});
 	});
-	
+
 	$('#insertar').click(function(e){
 		e.preventDefault();
 		
@@ -17,25 +25,94 @@ $(function(){
 			data: JSON.stringify(usuario),
 			contentType: 'application/json; charset=utf-8',
 			dataType: 'json'
-		}).done(function(){
-			alert("Insertado");
+		}).done(function(usuario){
+			alert("Se ha insertado " + usuario.name);
 		}).fail(function(jqXHR, textStatus, errorThrown){
 			alert("ERROR: " + jqXHR.responseText);
 			console.log(jqXHR, textStatus, errorThrown);
 		});
 	});
 	
-//	$('#id').change(function(){
-//		$.getJSON('/api/usuario/' + $('#id').val(), function(usuario){
-//			$('#nick').val(usuario.nick);
-//			$('#password').val(usuario.password);
-//		});
-//	});
+	$('#modificar').click(function(e){
+		e.preventDefault();
+		
+		usuario = crearUsuarioDesdePantalla();
+		
+		$.ajax({
+			type: 'PUT',
+			url: 'usuario/' + $('#id').val(),
+			data: JSON.stringify(usuario),
+			contentType: 'application/json; charset=utf-8',
+			dataType: 'json'
+		}).done(function(usuario){
+			alert("Se ha modificado " + usuario.name);
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			alert("ERROR: " + jqXHR.responseText);
+			console.log(jqXHR, textStatus, errorThrown);
+		});
+	});
+
+	$('#borrar').click(function(e){
+		e.preventDefault();
+		
+		$.ajax({
+			type: 'DELETE',
+			url: 'usuario/' + $('#id').val()
+		}).done(function(){
+			alert("Se ha borrado el usuario");
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			alert("ERROR: " + jqXHR.responseText);
+			console.log(jqXHR, textStatus, errorThrown);
+		});
+	});
+	
+	$('#buscarTodos').click(function(e){
+		e.preventDefault();
+		
+		$.ajax({
+			type: 'GET',
+			url: 'usuario'
+		}).done(function(datos){
+			var usuario = datos._embedded.usuario;
+			usuariosATabla(usuario);
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			alert("ERROR: " + jqXHR.responseText);
+			console.log(jqXHR, textStatus, errorThrown);
+		});
+	});
+	
+	$('#buscarPorNombre').click(function(e){
+		e.preventDefault();
+		
+		$.ajax({
+			type: 'GET',
+			url: 'usuario/search/findByName?name=' + $('#name').val()
+		}).done(function(datos){
+			var usuario = datos._embedded.usuario;
+			usuariosATabla(usuario);
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			alert("ERROR: " + jqXHR.responseText);
+			console.log(jqXHR, textStatus, errorThrown);
+		});
+	});
+	
+	
+	$('#buscarPorPassword').click(function(e){
+		e.preventDefault();
+		
+		$.ajax({
+			type: 'GET',
+			url: 'usuario/search/findByPassword?password=' +$('#password').val()
+		}).done(function(datos){
+			var usuario = datos._embedded.usuario;			
+			usuariosATabla(usuario);
+		}).fail(function(jqXHR,textStatus, errorThrown){
+			alert("ERROR: "+jqXHR.responseText);
+			console.log(jqXHR, textStatus, errorThrown);
+		});
+	});
 });
 
-function buscarUsuarioPorId(id){
-	$.getJSON('usuario/' + id, rellenarUsuarioEnPantalla);
-}
 
 function rellenarUsuarioEnPantalla(usuario){
 	$('#name').val(usuario.name);
@@ -51,4 +128,15 @@ function crearUsuarioDesdePantalla(){
 	usuario.description = $('#description').val();
 	
 	return usuario;
+}
+
+function usuariosATabla(usuario) {
+	$('table').remove();
+	var tabla = $('<table border=1>');
+	
+	$.each(usuario, function(indice, usuario){
+		tabla.append('<tr><td>' + usuario.name + '</td><td>' + usuario.password + '</td><td>'+usuario.description+'</td></tr>');
+	});
+	
+	$(tabla).insertAfter('form');			
 }
